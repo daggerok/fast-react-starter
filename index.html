@@ -3,11 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>fast-react-starter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <style>/*TODO*/</style>
+  <style>
+    ul {
+      list-style: none;
+    }
+    .grid-item { width: 200px; }
+    .grid-item--width2 { width: 400px; }
+  </style>
 </head>
 <body>
-<div id="app"></div>
+<div id="app" class="container-fluid"></div>
 <!-- Choose your fastest CDN: -->
 <!-- npmcdn.com babel-core browser -->
 <script src="https://npmcdn.com/react@15/dist/react.min.js"></script>
@@ -38,10 +45,123 @@
 <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js" type="text/javascript"></script>
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js" type="text/javascript"></script>
 -->
+<!--<script src="https://unpkg.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>-->
+<script src="https://npmcdn.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script type="text/babel">
-  const App = () => (
-    <div>hi</div>
+  const Note = ({ note, onDelete }) => (
+    <div className="grid-item"
+         style={{color: note.color}}>
+      <span>
+        <span onClick={() => onDelete(note)}
+              className="delete-note"> x <br/>
+          {note.text}</span>
+      </span>
+    </div>
   );
+
+  class NoteEditor extends React.Component {
+    constructor() {
+      super();
+      this.state = { text: '' };
+      this.TEXT_LABLE = 'here is your text';
+      this.updateState = this.updateState.bind(this);
+      this.handleNoteAdd = this.handleNoteAdd.bind(this);
+    }
+    updateState(event) {
+      this.setState({ text: event.target.value });
+    }
+    handleNoteAdd() {
+      this.props.onNoteAdd({
+        id: Date.now(),
+        color: 'darkgrey',
+        text: this.state.text
+      });
+      this.setState({ text: this.TEXT_LABLE });
+    }
+    render() {
+      return (
+        <div>
+          <textarea rows="3"
+                    value={this.state.text}
+                    className="form-control"
+                    onChange={this.updateState}
+                    onClick={() => this.setState({ text: '' })}
+                    placeholder={this.TEXT_LABLE}></textarea>
+          <button onClick={this.handleNoteAdd}
+                  className="btn btn-danger">save</button>
+        </div>
+      );
+    }
+  }
+
+  class NotesGrid extends React.Component {
+    componentDidMount() {
+      this.msnry = new Masonry( this.refs.gridContainer, {
+        // options
+        itemSelector: '.grid-item',
+        columnWidth: 225,
+        isFitWidth: true,
+        gutter: 10
+      });
+    }
+    componentDidUpdate(prevProps) {
+      if (this.props.notes.length === prevProps.notes.length) {
+        return;
+      }
+      this.msnry.reloadItems();
+      this.msnry.layout();
+    }
+    render() {
+      return (
+          <div ref="gridContainer">
+            {this.props.notes.map((note, index) =>
+              <Note onDelete={this.props.onDeleteNote} key={index} note={note}/>
+            )}
+          </div>
+      );
+    }
+  }
+
+  class App extends React.Component {
+    constructor() {
+      super();
+      this.state = {
+        notes: []
+      };
+      this.NOTES_KEY = 'daggerok.notes';
+      this.handleNoteAdd = this.handleNoteAdd.bind(this);
+      this.handleDeleteNote = this.handleDeleteNote.bind(this);
+      this.storeNotesInLocalStorage = this.storeNotesInLocalStorage.bind(this);
+    }
+    handleNoteAdd(noteToBeSave) {
+      this.setState({ notes: [noteToBeSave, ...this.state.notes] });
+    }
+    handleDeleteNote(noteToBeRemoved) {
+      this.setState({ notes: this.state.notes.filter(note => note.id !== noteToBeRemoved.id) });
+    }
+    componentDidMount() {
+      const prevState = JSON.parse(window.localStorage.getItem(this.NOTES_KEY));
+      if (prevState && prevState.notes) {
+        this.setState({ notes: prevState.notes });
+      }
+    }
+    componentDidUpdate() {
+      this.storeNotesInLocalStorage();
+    }
+    storeNotesInLocalStorage() {
+      window.localStorage.setItem(this.NOTES_KEY, JSON.stringify(this.state));
+    }
+    render() {
+      return (
+        <div>
+          <NoteEditor onNoteAdd={this.handleNoteAdd} />
+          <NotesGrid notes={this.state.notes}
+                     onDeleteNote={this.handleDeleteNote} />
+        </div>
+      );
+    }
+  }
+
   ReactDOM.render(<App/>, document.getElementById('app'));
 </script>
 </body>
