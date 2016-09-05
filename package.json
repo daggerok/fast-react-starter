@@ -4,6 +4,7 @@
   "description": "Fast reactjs starter with CDN and browser transaformation",
   "main": "index.js",
   "scripts": {
+    "prestart": "npm i --no-optional",
     "start": "opn index.html"
   },
   "repository": {
@@ -16,6 +17,6 @@
   "author": "Maksim Kostromin",
   "license": "ISC",
   "devDependencies": {
-    "opn-cli": "^3.1.0"
+    "opn-cli": "*"
   }
 }
