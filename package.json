@@ -2,9 +2,16 @@
   "name": "fast-react-starter",
   "version": "1.0.0",
   "description": "Fast reactjs starter with CDN and browser transaformation",
-  "main": "index.js",
+  "main": "./src/main.js",
   "scripts": {
-    "start": "opn index.html"
+    "serve": "json-server ./dist/db.json -d 500 -w -p 3000 --static ./dist",
+    "build": "webpack --config ./config/webpack.config.production.babel.js -c --process -p",
+    "dev": "NODE_ENV=dev webpack-dev-server --config ./config/webpack.config.babel.js --content-base=./dist --inline",
+    "start": "NODE_ENV=production npm run webpack -- -w",
+    "webpack": "webpack --config ./config/webpack.config.babel.js -c --process",
+    "predev": "npm run prewebpack",
+    "prewebpack": "npm i && npm run clean",
+    "clean": "rimraf -rf ./dist/**/*.{js,html}"
   },
   "repository": {
     "type": "git",
@@ -16,6 +23,45 @@
   "author": "Maksim Kostromin",
   "license": "ISC",
   "devDependencies": {
-    "opn-cli": "*"
+    "babel-cli": "*",
+    "babel-loader": "*",
+    "babel-plugin-add-module-exports": "*",
+    "babel-plugin-react-html-attrs": "*",
+    "babel-plugin-transform-class-properties": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-react": "*",
+    "babel-preset-stage-0": "*",
+    "babel-register": "*",
+    "css-loader": "*",
+    "file-loader": "*",
+    "handlebars": "*",
+    "handlebars-loader": "*",
+    "html-webpack-plugin": "*",
+    "json-server": "*",
+    "opn-cli": "*",
+    "rimraf": "*",
+    "style-loader": "*",
+    "url-loader": "*",
+    "webpack": "*",
+    "webpack-dev-server": "*"
+  },
+  "dependencies": {
+    "babel-polyfill": "*",
+    "bootstrap": "*",
+    "react": "*",
+    "react-dom": "*",
+    "react-router": "*"
+  },
+  "babel": {
+    "presets": [
+      "stage-0",
+      "es2015",
+      "react"
+    ],
+    "plugins": [
+      "react-html-attrs",
+      "add-module-exports",
+      "transform-class-properties"
+    ]
   }
 }
