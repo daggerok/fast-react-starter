@@ -2,11 +2,11 @@
  * Created by mak on 9/6/16.
  */
 import React from 'react';
-import {Nav} from "./Nav";
+import Nav from "./Nav";
 
-export const Main = () => (
+export default () => (
   <div>
-    main component
+    <span>main component</span>
     <Nav/>
   </div>
 );

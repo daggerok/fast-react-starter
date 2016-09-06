@@ -49,6 +49,8 @@
     "rimraf": "*",
     "source-map-loader": "*",
     "style-loader": "*",
+    "stylus": "*",
+    "stylus-loader": "*",
     "url-loader": "*",
     "webpack": "*",
     "webpack-dev-server": "*"

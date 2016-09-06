@@ -4,7 +4,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-export const Nav = () => (
+export default () => (
   <ul>
     <li><Link to="/">root</Link></li>
     <li><Link to="/home">home</Link></li>

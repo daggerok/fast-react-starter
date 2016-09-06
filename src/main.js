@@ -1,15 +1,14 @@
 /**
  * Created by mak on 9/6/16.
  */
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
-import './assets/index.less';
+import './assets';
 
 import React, { Component } from "react";
 import { render } from "react-dom";
 import { Router, Route, IndexRoute, browserHistory, Link } from 'react-router';
-import { NotFound } from "./components/NotFound";
-import { Main } from "./components/Main";
+
+import NotFound from "./components/NotFound";
+import Main from "./components/Main";
 
 class App extends Component {
   constructor() {

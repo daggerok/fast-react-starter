@@ -7,6 +7,7 @@ import ExtractPlugin from 'extract-text-webpack-plugin';
 import autoprefixer from 'autoprefixer';
 
 const include   = [path.resolve(process.cwd(), './src')];
+const assetsInclude   = [path.resolve(process.cwd(), './src/assets')];
 const bsInclude = [path.resolve(process.cwd(), './node_modules/bootstrap/dist')];
 const config = {
   entry: {
@@ -39,8 +40,12 @@ const config = {
       loader: ExtractPlugin.extract('style', 'css!postcss')
     }, {
       test: /\.less$/,
-      exclude: /(node_modules|bower_components)/,
+      include: assetsInclude,
       loader: ExtractPlugin.extract('style','css!postcss!less')
+    }, {
+      test: /\.styl/,
+      include: assetsInclude,
+      loader: ExtractPlugin.extract('style','css!postcss!stylus')
     }, {
       test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
       include: bsInclude,
