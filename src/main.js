@@ -3,9 +3,13 @@
  */
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import './assets/index.less';
 
-import React, {Component} from "react";
-import {render} from "react-dom";
+import React, { Component } from "react";
+import { render } from "react-dom";
+import { Router, Route, IndexRoute, browserHistory, Link } from 'react-router';
+import { NotFound } from "./components/NotFound";
+import { Main } from "./components/Main";
 
 class App extends Component {
   constructor() {
@@ -29,9 +33,21 @@ class App extends Component {
 
   render() {
     return (
-      <div>I am living {this.state.seconds} seconds!</div>
+      <div>
+        <div>I am living {this.state.seconds} seconds!</div>
+        {this.props.children}
+      </div>
     );
   }
 }
 
-render(<App/>, document.getElementById('app'));
+render(
+  <Router history={browserHistory}>
+    <Route path="/" component={App}>
+      <IndexRoute component={Main}/>
+      <Route path="home" component={Main}/>
+      <Route path="*" component={NotFound}/>
+    </Route>
+  </Router>,
+  document.getElementById('app')
+);

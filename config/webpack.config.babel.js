@@ -38,6 +38,10 @@ const config = {
       // loader: ExtractPlugin.extract('style!css')
       loader: ExtractPlugin.extract('style', 'css!postcss')
     }, {
+      test: /\.less$/,
+      exclude: /(node_modules|bower_components)/,
+      loader: ExtractPlugin.extract('style','css!postcss!less')
+    }, {
       test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
       include: bsInclude,
       loader: 'file'
@@ -65,11 +69,12 @@ const config = {
   },
   plugins: [
     new ExtractPlugin('/[name].[hash].css', { allChunks: true }),
-    new HtmlWebpackPlugin({ template: './src/index.hbs' })
+    new HtmlWebpackPlugin({ template: './src/assets/index.hbs' })
   ],
   postcss: [ autoprefixer({ browsers: ['last 2 versions'] }) ],
   devtool: '#cheap-module-inline-source-map',
   devServer: {
+    historyApiFallback: true,
     inline:   true,
     progress: true
   }
